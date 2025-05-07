@@ -1,0 +1,151 @@
+package com.example.bankapp;
+
+
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+
+import java.util.Random;
+
+public class BankMain {
+
+    @FXML
+    private TextField manualNameField;
+
+    @FXML
+    private TextField manualAmountField;
+
+    @FXML
+    private TextField automaticNameField;
+
+    @FXML
+    private Button ingresoButton;
+
+    @FXML
+    private Button retiradaButton;
+
+    @FXML
+    private Button iniciarButton;
+
+    @FXML
+    private Button pararButton;
+
+    @FXML
+    private Label saldoLabel;
+
+    @FXML
+    private TextFlow logFlow;
+
+    @FXML
+    private ScrollPane logScrollPane;
+
+
+    private double saldoTotal = 1000.0;
+    private final double saldoMaximo = 5000.0;
+    private Thread automaticThread;
+    private boolean isRunning = false;
+
+    @FXML
+    public void initialize() {
+        ingresoButton.setOnAction(e -> handleManualTransaction(true));
+        retiradaButton.setOnAction(e -> handleManualTransaction(false));
+        iniciarButton.setOnAction(e -> startAutomaticTransactions());
+        pararButton.setOnAction(e -> stopAutomaticTransactions());
+    }
+
+    private void handleManualTransaction(boolean isIngreso) {
+        String name = manualNameField.getText();
+        String amountStr = manualAmountField.getText();
+
+        try {
+            double amount = Double.parseDouble(amountStr);
+            if (isIngreso) {
+                if (saldoTotal + amount <= saldoMaximo) {
+                    saldoTotal += amount;
+                    logTransaction("Manual", name, amount, Color.GREEN);
+                } else {
+                    showError("Saldo máximo excedido.");
+                }
+            } else {
+                if (saldoTotal >= amount) {
+                    saldoTotal -= amount;
+                    logTransaction("Manual", name, -amount, Color.RED);
+                } else {
+                    showError("Saldo insuficiente.");
+                }
+            }
+            updateSaldoLabel();
+        } catch (NumberFormatException e) {
+            showError("Cantidad inválida.");
+        }
+    }
+
+    private void startAutomaticTransactions() {
+        String name = automaticNameField.getText();
+        isRunning = true;
+
+        automaticThread = new Thread(() -> {
+            Random rand = new Random();
+            while (isRunning) {
+                try {
+                    boolean isIngreso = rand.nextBoolean();
+                    double amount = rand.nextInt(500) + 1;
+
+                    if (isIngreso) {
+                        if (saldoTotal + amount <= saldoMaximo) {
+                            saldoTotal += amount;
+                            logTransaction("Automático", name, amount, Color.BLUE);
+                        }
+                    } else {
+                        if (saldoTotal >= amount) {
+                            saldoTotal -= amount;
+                            logTransaction("Automático", name, -amount, Color.RED);
+                        }
+                    }
+                    updateSaldoLabel();
+                    Thread.sleep(rand.nextInt(2001) + 1000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
+        automaticThread.start();
+    }
+
+    private void stopAutomaticTransactions() {
+        isRunning = false;
+        if (automaticThread != null) {
+            automaticThread.interrupt();
+        }
+    }
+
+    private void updateSaldoLabel() {
+        Platform.runLater(() -> saldoLabel.setText("Saldo Total: " + saldoTotal + " €"));
+    }
+
+    private void logTransaction(String tipo, String persona, double cantidad, Color color) {
+        Platform.runLater(() -> {
+            Text logEntry = new Text(String.format("%s | %s | %.2f €\n", tipo, persona, cantidad));
+            logEntry.setFill(color);
+            logFlow.getChildren().add(logEntry);
+
+            // Scroll automático hacia abajo
+            logScrollPane.setVvalue(1.0); // Esto baja al final del ScrollPane
+        });
+    }
+
+
+    private void showError(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
+    }
+}
+

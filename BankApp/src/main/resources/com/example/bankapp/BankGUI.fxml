@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.1" fx:controller="com.example.bankapp.BankMain">
+  <top>
+    <VBox spacing="20" style="-fx-padding: 15; -fx-background-color: lightgray;">
+      <children>
+        <Label text="Gestión de Transacciones" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-alignment: center;" />
+        <HBox spacing="15" alignment="CENTER">
+          <children>
+            <Label text="Usuario:" style="-fx-font-size: 14px;" />
+            <TextField fx:id="manualNameField" promptText="Ingrese su nombre" style="-fx-pref-width: 200;" />
+            <Label text="Cantidad:" style="-fx-font-size: 14px;" />
+            <TextField fx:id="manualAmountField" promptText="Ingrese cantidad" style="-fx-pref-width: 100;" />
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </top>
+  <center>
+    <GridPane style="-fx-padding: 20; -fx-hgap: 20; -fx-vgap: 20; -fx-background-color: white;" alignment="CENTER">
+      <columnConstraints>
+        <ColumnConstraints percentWidth="50" />
+        <ColumnConstraints percentWidth="50" />
+      </columnConstraints>
+      <children>
+        <VBox spacing="15" GridPane.columnIndex="0" alignment="CENTER" style="-fx-border-color: gray; -fx-border-width: 2; -fx-padding: 15;">
+          <children>
+            <Label text="Transacciones Manuales" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <HBox spacing="10">
+              <children>
+                <Button fx:id="ingresoButton" text="Depositar" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;" />
+                <Button fx:id="retiradaButton" text="Retirar" style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-font-size: 14px;" />
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+        <VBox spacing="15" GridPane.columnIndex="1" alignment="CENTER" style="-fx-border-color: gray; -fx-border-width: 2; -fx-padding: 15;">
+          <children>
+            <Label text="Transacciones Automáticas" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <TextField fx:id="automaticNameField" promptText="Nombre del usuario" style="-fx-pref-width: 200;" />
+            <HBox spacing="10">
+              <children>
+                <Button fx:id="iniciarButton" text="Iniciar" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px;" />
+                <Button fx:id="pararButton" text="Detener" style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-size: 14px;" />
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+      </children>
+    </GridPane>
+  </center>
+  <bottom>
+    <VBox spacing="10" style="-fx-padding: 10; -fx-background-color: #f0f0f0;">
+      <children>
+        <HBox alignment="CENTER_LEFT" spacing="10">
+          <children>
+            <Label text="Saldo Actual:" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label fx:id="saldoLabel" text="1000.0 €" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: green;" />
+          </children>
+        </HBox>
+        <Label text="LOG" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <ScrollPane fx:id="logScrollPane" style="-fx-border-color: gray; -fx-border-width: 1;" fitToWidth="true" prefHeight="200">
+          <content>
+            <TextFlow fx:id="logFlow" style="-fx-padding: 10;" />
+          </content>
+        </ScrollPane>
+      </children>
+    </VBox>
+  </bottom>
+</BorderPane>
