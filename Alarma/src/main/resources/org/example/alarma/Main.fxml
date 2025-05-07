@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<?import java.net.URL?>
+<AnchorPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.alarma.MainController">
+
+    <stylesheets>
+        <URL value="@/styles.css" />
+    </stylesheets>
+
+    <StackPane fx:id="alarmContainer" styleClass="main-container"
+               AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="60"
+               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <padding>
+            <Insets bottom="50" left="50" right="50" top="50"/>
+        </padding>
+    </StackPane>
+
+    <HBox alignment="CENTER_RIGHT" styleClass="toolbar"
+          AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="20">
+        <Button text="Añadir Alarma" onAction="#addNewAlarm" styleClass="add-button"/>
+    </HBox>
+</AnchorPane>
